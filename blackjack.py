@@ -1,7 +1,7 @@
 from time import sleep
 from random import shuffle, choice
 
-delay = 1.8 # animation delay
+delay = 0.8 # animation delay
 
 # cards 
 
