@@ -7,7 +7,7 @@ from math import sqrt
 active_sheet('MVO')
 # dates for historical data - ystockquote uses 'yyyymmdd' format
 def two_str(x):
-    # adds 0 in front of months and dates under 10
+    # adds 0 in front of months and dates under 10 for yahoo
     x = str(x)
     if len(x) == 1:
         return '0' + x
@@ -34,13 +34,15 @@ CellRange('A1:E1, G1').value = ['Ticker', 'exp. return', 'risk-free rate',
 
 L = len(tickers)
 CellRange((2,1), (1 + L, 1)).value = tickers
+# write expected return and risk free rate as percents
 CellRange((2,2), (1 + L, 2)).value = map((lambda x: str(x * 100) + '%'),
                                          exp_return)
-Cell('C2').value = str(r * 100) + '%'
+Cell('C2').value = str(r * 100) + '%' 
+# correlation matrix labels
 CellRange((2,7), (1 + L, 7)).value = tickers
 CellRange((1,8), (1, 7 + L)).value = tickers
 
-# get data - uses closing price. change the map function for a different price
+# get data - uses closing price. change f for a different price
 data = []
 which_price = {'Open': 1, 'High': 2, 'Low': 3, 'Close': 4, 'Adjusted Close': 6}
 
@@ -52,7 +54,7 @@ for ticker in tickers:
     prices = map((lambda x: f(x)), prices) # just closing prices
     data.append(prices)
 
-# standardize data size in case some history doesn't go back far enough
+# standardize data size in case some stock history doesn't go back far enough
 num_prices = min(map(len, data))
 for i, ticker in enumerate(data):
     data[i] = ticker[-num_prices:] # last num_prices data points
@@ -71,7 +73,7 @@ cor_print = cor.flatten()
 cor_print = map((lambda x: round(x,3)), cor_print)
 CellRange((2,8),(1 + L, 7 + L)).value = cor_print
 
-# mvo
+# mvo - optimizes Sharpe ratio
 def portfolio_variance(a):
     '''Returns the variance of the portfolio with weights a.'''
     var = 0.0
@@ -79,20 +81,23 @@ def portfolio_variance(a):
     for i in xrange(L):
         for j in xrange(L):
             var += a[i]*a[j]*std_dev[i]*std_dev[j]*cor[i, j]
-    if var <= 0: # floating point errors
+    if var <= 0: # floating point errors for very low variance
         return 10**(-6)
     return var
 
 def sharpe_ratio(weights):
+    '''Returns the sharpe ratio of the portfolio with weights.'''
     var = portfolio_variance(weights)
     returns = scipy.array(exp_return)
     return (scipy.dot(weights, returns) - r)/sqrt(var)
 
 def sharpe_optimizer(weights):
+    # for optimization - computes last weight and returns negative of sharpe
+    # ratio (for minimizer to work)
     weights = scipy.append(weights, 1 - sum(weights)) # sum of weights = 1
     return - sharpe_ratio(weights)
 
-guess = scipy.ones(L - 1, dtype=float) * 1.0 / L # last asset weight added in optimizer
+guess = scipy.ones(L - 1, dtype=float) * 1.0 / L # L - 1 weights, last asset weight added in optimizer
 optimizer = fmin(sharpe_optimizer, guess)
 # optimizer docs: http://docs.scipy.org/doc/scipy-0.7.x/reference/generated/scipy.optimize.fmin.html
 optimal_weights = scipy.append(optimizer, 1 - sum(optimizer))
