@@ -107,28 +107,3 @@ Cell(L + 3, 2).value = 'Sharpe ratio:'
 Cell(L + 3, 3).value = round(optimal_val, 3)
 
 autofit()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
