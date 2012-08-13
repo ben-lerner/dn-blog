@@ -26,7 +26,6 @@ def opt_price(settlement, maturity, underlying, strike, dividendYield,
         opt_type = Option.Put
 
     # basic option
-
     payoff = PlainVanillaPayoff(opt_type, strike)
     exercise = EuropeanExercise(maturity)
     europeanOption = VanillaOption(payoff, exercise)
