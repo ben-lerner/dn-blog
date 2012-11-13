@@ -1,0 +1,7 @@
+Import and run "options_tutorial.py" to show the payoff of an option
+portfolio.
+
+"Underlying", "Call", and "Put" are valid option types.
+
+If you're following part 1 of the options blog post (link), set "Days to
+Expiry" as 0 and ignore volatility, interest rate and dividend rate.
