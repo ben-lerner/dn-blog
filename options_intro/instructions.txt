@@ -3,5 +3,6 @@ portfolio.
 
 "Underlying", "Call", and "Put" are valid option types.
 
-If you're following part 1 of the options blog post (link), set "Days to
+If you're following part 1 of the options blog post 
+(https://datanitro.com/blog/2012/11/13/Options/), set "Days to
 Expiry" as 0 and ignore volatility, interest rate and dividend rate.
