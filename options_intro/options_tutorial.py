@@ -59,7 +59,7 @@ num_calls, num_puts = opt_types.count('call'), opt_types.count('put')
 opt_strikes = CellRange((5,2),(4 + num_opts, 2)).value
 
 opt_expiry = CellRange((5,3),(4 + num_opts, 3)).value
-opt_expiry = [x if x else 0 for x in opt_expiry] # replace None with 0
+opt_expiry = [float(x)/365 if x else 0 for x in opt_expiry] # replace None with 0
 
 opt_qty = Cell("D5").vertical
 
