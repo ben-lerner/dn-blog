@@ -66,7 +66,6 @@ def flip_card():
     Cell('F3').font.color = hole_card[1]
 
 def hand_total(row):
-    col = 2
     hand = CellRange((row, 5), (row, 25)).value
     hand = filter(None, hand) # remove blank cells
     hand = map((lambda x: str(x)), hand) # change numbers to strings
