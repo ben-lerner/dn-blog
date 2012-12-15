@@ -10,7 +10,7 @@ class Deck(object):
 
     def __init__(self):
         self.cards = range(52)
-        random.shuffle(self.cards)
+        shuffle(self.cards)
         self.cards.reverse()
 
     def deal(self):
